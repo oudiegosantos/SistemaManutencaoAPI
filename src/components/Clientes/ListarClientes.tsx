@@ -1,6 +1,6 @@
 import { IonList, IonItem, IonLabel, IonButton } from "@ionic/react";
 import React, { useEffect, useState }  from "react";
-import { listarClientes } from "../../services/clienteService";
+import { deletarClientes, editarClientes, listarClientes } from "../../services/clienteService";
 
 interface Cliente {
     id: number;
@@ -21,6 +21,23 @@ const ListarClientes: React.FC<Props> = ({oVoltar}) => {
         setClientes(dados);
     }
 
+    async function editClientes(id: number, nome: string, telefone: string, endereco: string) {
+        const novoNome = prompt("Digite o novo nome: ", nome) ?? nome;
+        const novoTelefone = prompt("Digite o novo telefone: ", telefone) ?? telefone;
+        const novoEndereco = prompt("Digite o novo endereço: ", endereco) ?? endereco;
+
+        await editarClientes(id, novoNome, novoTelefone, novoEndereco);
+        buscarClientes();
+
+    }
+
+    async function deletClientes(id: number) {
+         if(!confirm("Deseja excluir o cliente? "))
+        return;
+         await deletarClientes(id)
+         buscarClientes();
+    }
+
     useEffect(() => {
         buscarClientes();
     }, []);
@@ -36,6 +53,8 @@ const ListarClientes: React.FC<Props> = ({oVoltar}) => {
                         <p>Contato: {c.telefone}</p>
                         <p>Endereço: {c.endereco}</p>
                     </IonLabel>
+                    <IonButton color="warning" onClick={() => editClientes(c.id, c.nome, c.telefone, c.endereco)}>Editar</IonButton>
+                    <IonButton color="secondary" onClick={() => deletClientes(c.id)}>Deletar</IonButton>
                 </IonItem>
             ))}
         </IonList>
