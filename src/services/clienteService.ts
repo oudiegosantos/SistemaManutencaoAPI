@@ -1,13 +1,38 @@
-import { Method } from "ionicons/dist/types/stencil-public-runtime";
 
-const API = "http://localhost:5174";
+const API = "https://sistemamanutencaoapp.onrender.com";
+
+
+//CADASTRAR USUARIO
+
+export async function registerUser(nome: string, email: string, senha: string, perfil: string) {
+    const res = await fetch(`${API}/auth/registrar`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({nome, email, senha, perfil})
+    })
+
+    return await res.json();
+    
+}
+
+// LOGIN USUARIO 
+
+export async function loginUser(email: string, senha: string) {
+    const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email, senha})
+    })
+
+    return await res.json()
+}
 
 // CADASTRAR CLIENTE
 export async function cadastrarCliente(nome: string, telefone: string, endereco: string) {
 
     await fetch(`${API}/clientes`, {
         method: "POST",
-        headers: {"content-Type": "application/json"},
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({nome, telefone, endereco})
 
     });
