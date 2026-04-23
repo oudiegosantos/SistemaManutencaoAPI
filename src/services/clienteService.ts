@@ -22,7 +22,9 @@ export async function loginUser(email: string, senha: string) {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({email, senha})
-    })
+    });
+
+    if(!res.ok) throw new Error("Email ou senha inválidos!");
 
     return await res.json()
 }

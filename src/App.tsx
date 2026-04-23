@@ -39,11 +39,15 @@ setupIonicReact();
 
 const App: React.FC = () => {
   
-  const [token, setToken] = useState("");
-  const [nome, setNome] = useState("");
-  const [perfil, setPerfil] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") ?? "");
+  const [nome, setNome] = useState(localStorage.getItem("nome") ?? "");
+  const [perfil, setPerfil] = useState(localStorage.getItem("perfil") ?? "");
 
   function handleLogin(token: string, nome: string, perfil: string) {
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("nome", nome);
+    localStorage.setItem("perfil", perfil);
     setToken(token);
     setNome(nome);
     setPerfil(perfil);
@@ -57,13 +61,22 @@ const App: React.FC = () => {
     )
   }
 
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("nome");
+    localStorage.removeItem("perfil");
+    setToken("");
+    setNome("");
+    setPerfil("");
+  }
+
   return (
 
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/home">
-          <Home />
+          <Home onLogout={handleLogout} perfil={perfil}/>
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />

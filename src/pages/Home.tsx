@@ -3,30 +3,44 @@ import React, { useState } from "react";
 import CadastrarCliente from "../components/Clientes/CadastrarCliente";
 import ListarClientes from "../components/Clientes/ListarClientes";
 import { listarClientes } from "../services/clienteService";
+import GerenUser from "../components/GerenciarUsuarios";
 import "./Home.css";
+import { warning } from "ionicons/icons";
 
-const Home: React.FC = () => {
+interface Props {
+  onLogout: () => void;
+  perfil: string
+}
+
+const Home: React.FC<Props> = ({onLogout, perfil}) => {
 
   const [tela, setTela] = useState("");
   const [atualizar, setAtualizar] = useState(0);
+
   return (
     <IonPage>
       <IonHeader>
         {/* <IonToolbar>
          <IonTitle>Metalúrgica Montenegro</IonTitle>
         </IonToolbar> */}
+        <IonButton onClick={onLogout}>Sair</IonButton>
       </IonHeader>
       <IonContent>
  {tela === "" && (
 
   <div className="home-container">
     <div className="title-logo">Metalúrgica Montenegro</div>
-      <IonButton className="button-cad" expand="block" onClick={() => setTela("cadastrar")}>Cadastrar</IonButton>
+      <IonButton className="button-cad" expand="block" onClick={() => setTela("cadastrar")}>Cadastrar Cliente</IonButton>
       <IonButton className="button-list" expand="block" onClick={() => setTela("listar")}>Listar Clientes</IonButton>
+
+      {/* {perfil === "admin" && (
+        <IonButton expand="block" color="warning" onClick={() => setTela("usuarios")}>Gerenciar Usuários</IonButton>
+      )} */}
 
   </div>
   )}
-    
+  
+  {tela === "usuarios" && <GerenUser oVoltar={() => setTela("")}/>}
   {tela === "cadastrar" && <CadastrarCliente oVoltar={() => setTela("")} />}
   {tela === "listar" && (
     <>
